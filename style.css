@@ -1,0 +1,312 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    color: #ffffff;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.screen.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+/* Title Screen */
+#title-screen h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+#title-screen h2 {
+    font-size: 2rem;
+    color: #ff6b6b;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #a8a8a8;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-family: inherit;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    margin-bottom: 2rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.instructions {
+    text-align: center;
+    color: #888;
+    line-height: 1.6;
+}
+
+.instructions p {
+    margin-bottom: 0.5rem;
+}
+
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    font-size: 1.1rem;
+}
+
+
+
+#score, #timer {
+    color: #4ecdc4;
+    font-weight: bold;
+}
+
+.exit-btn {
+    background: rgba(255, 107, 107, 0.8);
+    border-color: #ff6b6b;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    margin-left: 20px;
+}
+
+.exit-btn:hover {
+    background: rgba(255, 107, 107, 1);
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
+#rules-display {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #4ecdc4;
+    max-width: 300px;
+}
+
+#rules-display h3 {
+    color: #4ecdc4;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+#rules-list {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.rule {
+    margin-bottom: 8px;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.rule.violated {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    animation: ruleViolation 0.5s ease;
+}
+
+#game-over-screen {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+#game-over-screen h2 {
+    font-size: 3rem;
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+}
+
+#final-score {
+    color: #4ecdc4;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+    to { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.3); }
+}
+
+
+
+@keyframes ruleViolation {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2px, -2px); }
+    20% { transform: translate(2px, -2px); }
+    30% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, 2px); }
+    50% { transform: translate(-1px, -1px); }
+    60% { transform: translate(1px, -1px); }
+    70% { transform: translate(-1px, 1px); }
+    80% { transform: translate(1px, 1px); }
+    90% { transform: translate(0, 0); }
+}
+
+@keyframes ruleChangeFlash {
+    0% { 
+        background: rgba(0, 0, 0, 0.7);
+        border-color: #4ecdc4;
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+    }
+    25% { 
+        background: rgba(249, 202, 36, 0.8);
+        border-color: #f9ca24;
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(249, 202, 36, 0.8);
+    }
+    50% { 
+        background: rgba(255, 107, 107, 0.8);
+        border-color: #ff6b6b;
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 107, 107, 0.8);
+    }
+    75% { 
+        background: rgba(78, 205, 196, 0.8);
+        border-color: #4ecdc4;
+        transform: scale(1.08);
+        box-shadow: 0 0 35px rgba(78, 205, 196, 0.8);
+    }
+    100% { 
+        background: rgba(0, 0, 0, 0.7);
+        border-color: #4ecdc4;
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+    }
+}
+
+@keyframes ruleAppear {
+    0% { 
+        opacity: 0;
+        transform: translateX(-20px);
+        background: rgba(249, 202, 36, 0.3);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateX(0);
+        background: transparent;
+    }
+}
+
+.screen-shake {
+    animation: screenShake 0.5s ease;
+}
+
+@media (max-width: 768px) {
+    #title-screen h1 {
+        font-size: 2.5rem;
+    }
+    
+    #title-screen h2 {
+        font-size: 1.5rem;
+    }
+    
+    #hud {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    #rules-display {
+        max-width: 250px;
+        font-size: 0.8rem;
+    }
+} 
